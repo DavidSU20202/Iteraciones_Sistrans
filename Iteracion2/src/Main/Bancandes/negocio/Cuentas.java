@@ -1,5 +1,7 @@
 package Main.Bancandes.negocio;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;  
+import java.util.Date;   
 public class Cuentas {
 	private int Tipo_Id;
 	private long Numero_Id;
@@ -7,6 +9,7 @@ public class Cuentas {
 	private int Tipo_Cuenta;
 	private int Estado;
 	private int Saldo;
+	private Date fecha_creacion;
 	
 	public Cuentas()
 	{
@@ -16,8 +19,9 @@ public class Cuentas {
 		this.Tipo_Cuenta=0;
 		this.Estado=0;
 		this.Saldo=0;
+		this.fecha_creacion=null;
 	}
-	public Cuentas(int Tipo_Id, long Numero_Id, long Numero_Cuenta, int Tipo_Cuenta, int Estado, int Saldo)
+	public Cuentas(int Tipo_Id, long Numero_Id, long Numero_Cuenta, int Tipo_Cuenta, int Estado, int Saldo, String fecha_creacion) throws ParseException
 	{
 		this.Tipo_Id=Tipo_Id;
 		this.Numero_Id=Numero_Id;
@@ -25,6 +29,7 @@ public class Cuentas {
 		this.Tipo_Cuenta=Tipo_Cuenta;
 		this.Estado=Estado;
 		this.Saldo=Saldo;
+		this.fecha_creacion=new SimpleDateFormat("dd/MM/yyyy").parse(fecha_creacion); 
 	}
 	public int getTipo_Id()
 	{
@@ -73,6 +78,14 @@ public class Cuentas {
 	public void setSaldo(int Saldo)
 	{
 		this.Saldo=Saldo;
+	}
+	public Date getfecha_creacion()
+	{
+		return this.fecha_creacion;
+	}
+	public void setfecha_creacion(Date fecha_creacion)
+	{
+		this.fecha_creacion=fecha_creacion;
 	}
 	public String toString()
 	{

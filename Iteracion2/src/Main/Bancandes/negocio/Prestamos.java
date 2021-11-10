@@ -2,6 +2,7 @@ package Main.Bancandes.negocio;
 
 public class Prestamos {
 	private long Id_Prestamo;
+	private int tipo_Id;
 	private long Numero_Id;
 	private int Tipo_Prestamo; //1:Vivienda, 2: Estudio, 3:Automovil, 4:Calamidad, 5:Libre
 	private int Monto;
@@ -15,6 +16,7 @@ public class Prestamos {
 	public Prestamos()
 	{
 		this.Id_Prestamo=0;
+		this.tipo_Id=0;
 		this.Numero_Id=0;
 		this.Tipo_Prestamo=0;
 		this.Monto=0;
@@ -25,9 +27,10 @@ public class Prestamos {
 		this.Valor_Cuota=0;
 		this.Dia=0;
 	}
-	public Prestamos(long Id_Prestamo, long Numero_Id, int Tipo_Prestamo, int Monto, float Interes, int Cuotas,int Dia, int Valor_Cuota, int Estado, int Saldo)
+	public Prestamos(long Id_Prestamo, long Numero_Id, int Tipo_Prestamo, int Monto, float Interes, int Cuotas,int Dia, int Valor_Cuota, int Estado, int Saldo, int Tipo_Id)
 	{
 		this.Id_Prestamo=Id_Prestamo;
+		this.tipo_Id=Tipo_Id;
 		this.Numero_Id=Numero_Id;
 		this.Tipo_Prestamo=Tipo_Prestamo;
 		this.Monto=Monto;

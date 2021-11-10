@@ -13,10 +13,10 @@ public class SQLCuentas {
 	{
 		this.pp = pp;
 	}
-	public long RegistrarCuenta(PersistenceManager pm, int Tipo_Id, long Numero_Id, long Numero_Cuenta, int Tipo_Cuenta, int Estado)
+	public long RegistrarCuenta(PersistenceManager pm, int Tipo_Id, long Numero_Id, long Numero_Cuenta, int Tipo_Cuenta, int Estado, String fecha_creacion)
 	{
-        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaCuentas () + "(Tipo_Id, Numero_Id, Numero_Cuenta, Tipo_Cuenta, Estado, Saldo) values (?, ?, ?, ?, ?, ?)");
-        q.setParameters(Tipo_Id, Numero_Id, Numero_Cuenta, Tipo_Cuenta, Estado);
+        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaCuentas () + "(Tipo_Id, Numero_Id, Numero_Cuenta, Tipo_Cuenta, Estado, Saldo, fecha_creacion) values (?, ?, ?, ?, ?, ?, ?)");
+        q.setParameters(Tipo_Id, Numero_Id, Numero_Cuenta, Tipo_Cuenta, Estado, fecha_creacion);
         return (long) q.executeUnique();
 	}
 	public long eliminarCuentaPorNumero_Cuenta (PersistenceManager pm, long Numero_Cuenta)

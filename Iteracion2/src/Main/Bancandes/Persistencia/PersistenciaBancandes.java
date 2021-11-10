@@ -153,7 +153,7 @@ public class PersistenciaBancandes {
             tx.begin();
             Usuarios usu = sqlUsuarios.darUsuarioPorLogin(pm, Login);
             tx.commit();
-            int tipo=usu.getTipo_Id();
+            int tipo=usu.getRol();
             
             return tipo;
         }
@@ -172,7 +172,7 @@ public class PersistenciaBancandes {
             pm.close();
         }
 	}
-	public Usuarios RegistrarUsuario(String loginU,int Tipo_Id, String Login, String Palabra_Clave, int Rol, String Nombre, String Nacionalidad, String Direccion, String Correo, int Telefono, String Ciudad, String Departamento, int CodigoPostal)
+	public Usuarios RegistrarUsuario(String loginU,long Numero_Id, int Tipo_Id, String Login, String Palabra_Clave, int Rol, String Nombre, String Nacionalidad, String Direccion, String Correo, int Telefono, String Ciudad, String Departamento, int CodigoPostal)
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
         Transaction tx=pm.currentTransaction();
@@ -181,7 +181,7 @@ public class PersistenciaBancandes {
         	ArrayList<Integer> PermisoRequerido = new ArrayList<Integer>();
             tx.begin();
             int tipo = verificarTipoUsuario(loginU);
-            if (Rol==1)
+            if (Rol==1 | Rol==6)
             {
             	PermisoRequerido.add(3);
             }
@@ -191,7 +191,6 @@ public class PersistenciaBancandes {
             }
 
             if (TienePermiso(tipo,PermisoRequerido)) {
-            	long Numero_Id = nextval ();
                 long tuplasInsertadas = sqlUsuarios.adicionarUsuario(pm, Tipo_Id, Numero_Id, Login, Palabra_Clave, Rol, Nombre, Nacionalidad, Direccion, Correo, Telefono, Ciudad, Departamento, CodigoPostal);
                 tx.commit();
                 
@@ -220,7 +219,7 @@ public class PersistenciaBancandes {
         }
 		
 	}
-	public Oficina RegistrarOficina(String loginU, String Nombre, String Direccion, long Id_Gerente, ArrayList<Integer> PuntosAtencion)
+	public Oficina RegistrarOficina(String loginU, String Nombre, String Direccion, long Id_Gerente, ArrayList<Integer> PuntosAtencion, int tipo_Id_Gerente)
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
         Transaction tx=pm.currentTransaction();
@@ -237,12 +236,12 @@ public class PersistenciaBancandes {
 	            	int tipo1=PuntosAtencion.get(i);
 	            	this.RegistrarPuntoDeAtencion(loginU, tipo1, Id_Oficina);
 	            }
-	            long tuplasInsertadas = sqlOficina.RegistrarOficina(pm, Nombre, Direccion, PuntosAtencion.size(), Id_Gerente, Id_Oficina);
+	            long tuplasInsertadas = sqlOficina.RegistrarOficina(pm, Nombre, Direccion, PuntosAtencion.size(), Id_Gerente, Id_Oficina, tipo_Id_Gerente);
 	            tx.commit();
 	            
 	            log.trace ("Inserción de Oficina: " + Id_Oficina + ": " + tuplasInsertadas + " tuplas insertadas");
 	            
-	            return new Oficina (Nombre, Direccion, PuntosAtencion.size(), Id_Gerente, Id_Oficina);
+	            return new Oficina (Nombre, Direccion, PuntosAtencion.size(), Id_Gerente, Id_Oficina, tipo_Id_Gerente);
             }
             else {
             log.trace ("No tiene Permisos");
@@ -303,7 +302,7 @@ public class PersistenciaBancandes {
             pm.close();
         }
 	}
-	public Cuentas RegistrarCuenta(String loginU, int Tipo_Id, long Numero_Id, int Tipo_Cuenta)
+	public Cuentas RegistrarCuenta(String loginU, int Tipo_Id, long Numero_Id, int Tipo_Cuenta, String fecha_creacion)
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
         Transaction tx=pm.currentTransaction();
@@ -315,12 +314,12 @@ public class PersistenciaBancandes {
             Aprobados.add(3);   
             if (TienePermiso(tipo,Aprobados)) {
 		        long Numero_Cuenta = nextval ();
-		        long tuplasInsertadas = sqlCuentas.RegistrarCuenta(pm, Tipo_Id, Numero_Id, Numero_Cuenta, Tipo_Cuenta, 1);
+		        long tuplasInsertadas = sqlCuentas.RegistrarCuenta(pm, Tipo_Id, Numero_Id, Numero_Cuenta, Tipo_Cuenta, 1, fecha_creacion);
 		        tx.commit();
 		        
 		        log.trace ("Inserción de Punto de Atencion: " + Numero_Cuenta + ": " + tuplasInsertadas + " tuplas insertadas");
 		        
-		        return new Cuentas (Tipo_Id, Numero_Id, Numero_Cuenta, Tipo_Cuenta, 1, 0);
+		        return new Cuentas (Tipo_Id, Numero_Id, Numero_Cuenta, Tipo_Cuenta, 1, 0, fecha_creacion);
             }
             else {
             log.trace ("No tiene Permisos");
@@ -379,7 +378,7 @@ public class PersistenciaBancandes {
         }
 		
 	}
-	public Operaciones RegistrarOperacionSobreCuenta(String loginU, int Tipo_Id, long Numero_Id, long Numero_Cuenta, int valor, long Puesto_Atencion, long Empleado, Date Fecha) 
+	public Operaciones RegistrarOperacionSobreCuenta(String loginU, int Tipo_Id, long Numero_Id, long Numero_Cuenta, int valor, long Puesto_Atencion, int Tipo_Operacion, Date Fecha) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
         Transaction tx=pm.currentTransaction();
@@ -390,15 +389,16 @@ public class PersistenciaBancandes {
             ArrayList<Integer> Aprobados = new ArrayList<Integer>();
             Aprobados.add(1);
             Aprobados.add(4);
+            Aprobados.add(6);
             if (TienePermiso(tipo,Aprobados)) {
 	            long Id_Operacion = nextval ();
 	            sqlCuentas.ActualizarSaldoCuenta(pm, Numero_Cuenta, valor);
-	            sqlOperaciones.adicionarOperacion(pm, Id_Operacion, Tipo_Id, Numero_Id, Numero_Cuenta, valor, Puesto_Atencion, Empleado, Fecha);
+	            sqlOperaciones.adicionarOperacion(pm, Id_Operacion, Tipo_Id, Numero_Id, Numero_Cuenta, valor, Puesto_Atencion, Tipo_Operacion, Fecha);
 	            tx.commit();
 	            
 	            log.trace ("Inserción de Operacion: " + Id_Operacion + "en cuenta: " + Numero_Cuenta );
 	            
-	            return new Operaciones (Id_Operacion, Tipo_Id, Numero_Id, Numero_Cuenta, valor, Puesto_Atencion, Empleado, Fecha);
+	            return new Operaciones (Id_Operacion, Tipo_Id, Numero_Id, Numero_Cuenta, valor, Puesto_Atencion, Tipo_Operacion, Fecha);
             }
             else {
             	log.trace ("No tiene Permisos");
@@ -420,7 +420,7 @@ public class PersistenciaBancandes {
             pm.close();
         }
 	}
-	public Prestamos SolicitarPrestamo(String loginU, int Monto, int TipoPrestamo, long Numero_Id)
+	public Prestamos SolicitarPrestamo(String loginU, int Monto, int TipoPrestamo, long Numero_Id, int tipo_Id)
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
         Transaction tx=pm.currentTransaction();
@@ -437,7 +437,7 @@ public class PersistenciaBancandes {
 	            
 	            log.trace ("Inserción de Prestamo: " + Id_Prestamo + "en usuario: " + Numero_Id );
 	            
-	            return new Prestamos (Id_Prestamo, Numero_Id, TipoPrestamo, Monto, 0, 0, 0, 0, 2, 0);
+	            return new Prestamos (Id_Prestamo, Numero_Id, TipoPrestamo, Monto, 0, 0, 0, 0, 2, 0, tipo_Id);
             }
             else {
             	log.trace ("No tiene Permisos");
@@ -459,7 +459,7 @@ public class PersistenciaBancandes {
             pm.close();
         }
 	}
-	public Prestamos RegistrarPrestamo(String loginU, int Tipo_Id, long Numero_Id, int Tipo_Prestamo, int Monto, int Estado, int Saldo, long Numero_Cuenta, float Intereses, int Cuotas, int Dia, int Valor_Cuota)
+	public Prestamos RegistrarPrestamo(String loginU, int Tipo_Id, long Numero_Id, int Tipo_Prestamo, int Monto, int Estado, int Saldo, long Numero_Cuenta, float Intereses, int Cuotas, int Dia, int Valor_Cuota, int tipo_Id)
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
         Transaction tx=pm.currentTransaction();
@@ -472,12 +472,12 @@ public class PersistenciaBancandes {
             if (TienePermiso(tipo,Aprobados)) {
 	            long Id_Prestamo = nextval ();
 	            sqlCuentas.ActualizarSaldoCuenta(pm, Numero_Cuenta, Monto);
-	            sqlPrestamos.RegistrarPrestamo(pm, Id_Prestamo, Tipo_Id, Numero_Id, Tipo_Prestamo, Monto, Estado, Saldo);
+	            sqlPrestamos.RegistrarPrestamo(pm, Id_Prestamo, Tipo_Id, Numero_Id, Tipo_Prestamo, Monto, Estado, Saldo, tipo_Id);
 	            tx.commit();
 	            
 	            log.trace ("Inserción de Prestamo: " + Id_Prestamo + "en usuario: " + Numero_Id );
 	            
-	            return new Prestamos (Id_Prestamo, Numero_Id, Tipo_Prestamo, Monto, Intereses, Cuotas, Dia, Valor_Cuota, Estado, Saldo);
+	            return new Prestamos (Id_Prestamo, Numero_Id, Tipo_Prestamo, Monto, Intereses, Cuotas, Dia, Valor_Cuota, Estado, Saldo, tipo_Id);
             }
             else {
             	log.trace ("No tiene Permisos");
@@ -499,7 +499,7 @@ public class PersistenciaBancandes {
             pm.close();
         }
 	}
-	public Operaciones RegistrarOperacionSobrePrestamo(String loginU, long IdPrestamo, int Tipo_Id, long Numero_Id, long Numero_Cuenta, int valor, long Puesto_Atencion, long Empleado, Date Fecha)
+	public Operaciones RegistrarOperacionSobrePrestamo(String loginU, long IdPrestamo, int Tipo_Id, long Numero_Id, long Numero_Cuenta, int valor, long Puesto_Atencion, int Tipo_Operacion, Date Fecha)
 	{
 		{
 			PersistenceManager pm = pmf.getPersistenceManager();
@@ -513,12 +513,12 @@ public class PersistenciaBancandes {
 	            if (TienePermiso(tipo,Aprobados)) {
 	            long Id_Operacion = nextval ();
 		            sqlPrestamos.ActualizarPrestamo(pm, IdPrestamo, valor);
-		            sqlOperaciones.adicionarOperacion(pm, Id_Operacion, Tipo_Id, Numero_Id, Numero_Cuenta, valor, Puesto_Atencion, Empleado, Fecha);
+		            sqlOperaciones.adicionarOperacion(pm, Id_Operacion, Tipo_Id, Numero_Id, Numero_Cuenta, valor, Puesto_Atencion, Tipo_Operacion, Fecha);
 		            tx.commit();
 		            
 		            log.trace ("Inserción de Operacion: " + Id_Operacion + "en prestamo: " + IdPrestamo );
 		            
-		            return new Operaciones (Id_Operacion, Tipo_Id, Numero_Id, Numero_Cuenta, valor, Puesto_Atencion, Empleado, Fecha);
+		            return new Operaciones (Id_Operacion, Tipo_Id, Numero_Id, Numero_Cuenta, valor, Puesto_Atencion, Tipo_Operacion, Fecha);
 	            }
 	            else {
 	            	log.trace ("No tiene Permisos");
@@ -570,7 +570,7 @@ public class PersistenciaBancandes {
 	}
 	public void ConsultarLasCuentasEnBancandes(int Tipo_Cuenta, int RangoSaldo1, int RangoSaldo2, Date Fecha_Creacion, Date FechaUltimoMovimiento, long Numero_Id)
 	{
-		
+		//ya esta hecho
 	}
 	public void ConsultarCliente(long Numero_Id)
 	{

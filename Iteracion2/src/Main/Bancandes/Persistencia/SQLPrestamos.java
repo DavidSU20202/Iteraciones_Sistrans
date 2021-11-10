@@ -11,10 +11,10 @@ public class SQLPrestamos {
 	{
 		this.pp = pp;
 	}
-	public long RegistrarPrestamo (PersistenceManager pm, long Id_Prestamo, int Tipo_Id, long Numero_Id, int Tipo_Prestamo, int Monto, int Estado, int Saldo) 
+	public long RegistrarPrestamo (PersistenceManager pm, long Id_Prestamo, int Tipo_Id, long Numero_Id, int Tipo_Prestamo, int Monto, int Estado, int Saldo, int tipo_Id2) 
 	{
-        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaUsuarios () + "(Id_Prestamo, Tipo_Id, Numero_Id, Tipo_Prestamo, Monto, Estado, Saldo) values (?, ?, ?, ?, ?, ?, ?)");
-        q.setParameters(Id_Prestamo, Tipo_Id, Numero_Id, Tipo_Prestamo, Monto, Estado, Saldo);
+        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaUsuarios () + "(Id_Prestamo, Tipo_Id, Numero_Id, Tipo_Prestamo, Monto, Estado, Saldo,tipo_Id2) values (?, ?, ?, ?, ?, ?, ?, ?)");
+        q.setParameters(Id_Prestamo, Tipo_Id, Numero_Id, Tipo_Prestamo, Monto, Estado, Saldo, tipo_Id2);
         return (long) q.executeUnique();
 	}
 	public long eliminarPrestamoPorId_Prestamo (PersistenceManager pm, long Id_Prestamo)

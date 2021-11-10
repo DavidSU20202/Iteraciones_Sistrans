@@ -10,10 +10,10 @@ public class SQLOficina {
 	{
 		this.pp = pp;
 	}
-	public long RegistrarOficina(PersistenceManager pm, String Nombre, String Direccion, int PuntosAtencion, long Id_Gerente, long Id_Oficina)
+	public long RegistrarOficina(PersistenceManager pm, String Nombre, String Direccion, int PuntosAtencion, long Id_Gerente, long Id_Oficina, int tipo_Id_Gerente)
 	{
-        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaOficina () + "(Nombre, Direccion, PuntosAtencion, Id_Gerente, Id_Oficina) values (?, ?, ?, ?,?)");
-        q.setParameters(Nombre, Direccion, PuntosAtencion, Id_Gerente, Id_Oficina);
+        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaOficina () + "(Nombre, Direccion, PuntosAtencion, Id_Gerente, Id_Oficina, tipo_Id_Gerente) values (?, ?, ?, ?, ?, ?)");
+        q.setParameters(Nombre, Direccion, PuntosAtencion, Id_Gerente, Id_Oficina, tipo_Id_Gerente);
         return (long) q.executeUnique();
 	}
 }

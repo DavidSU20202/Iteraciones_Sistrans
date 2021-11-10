@@ -14,10 +14,10 @@ public class SQLOperaciones {
 		this.pp = pp;
 	}
 	@SuppressWarnings("rawtypes")
-	public long adicionarOperacion (PersistenceManager pm, long Id_Operacion, int Tipo_Id, long Numero_Id, long Numero_Cuenta, int valor, long Puesto_Atencion, long Empleado, Date Fecha) 
+	public long adicionarOperacion (PersistenceManager pm, long Id_Operacion, int Tipo_Id, long Numero_Id, long Numero_Cuenta, int valor, long Puesto_Atencion, int Tipo_Operacion, Date Fecha) 
 	{
-        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaOperaciones () + "(Id_Operacion, Tipo_Id, Numero_Id, Numero_Cuenta, valor, Puesto_Atencion, Empleado, Fecha) values (?, ?, ?, ?, ?, ?, ?, ?)");
-        q.setParameters(Id_Operacion, Tipo_Id, Numero_Id, Numero_Cuenta, valor, Puesto_Atencion, Empleado, Fecha);
+        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaOperaciones () + "(Id_Operacion, Tipo_Id, Numero_Id, Numero_Cuenta, valor, Puesto_Atencion, Tipo_Operacion, Fecha) values (?, ?, ?, ?, ?, ?, ?, ?)");
+        q.setParameters(Id_Operacion, Tipo_Id, Numero_Id, Numero_Cuenta, valor, Puesto_Atencion, Tipo_Operacion, Fecha);
         return (long) q.executeUnique();
 	}
 	public long eliminarOperacionPorId_Operacion (PersistenceManager pm, long Id_Operacion)

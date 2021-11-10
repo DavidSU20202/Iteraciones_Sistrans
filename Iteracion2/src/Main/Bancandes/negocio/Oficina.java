@@ -6,6 +6,7 @@ public class Oficina {
 	private int PuntosAtencion;
 	private long Id_Gerente;
 	private long Id_Oficina;
+	private int tipo_Id_Gerente;
 	
 	public Oficina()
 	{
@@ -15,13 +16,14 @@ public class Oficina {
 		this.Id_Gerente=0;
 		this.Id_Oficina=0;
 	}
-	public Oficina(String Nombre, String Direccion, int PuntosAtencion, long Id_Gerente, long Id_Oficina)
+	public Oficina(String Nombre, String Direccion, int PuntosAtencion, long Id_Gerente, long Id_Oficina, int tipo_Id_Gerente)
 	{
 		this.Nombre=Nombre;
 		this.Direccion=Direccion;
 		this.PuntosAtencion=PuntosAtencion;
 		this.Id_Gerente=Id_Gerente;
 		this.Id_Oficina=Id_Oficina;
+		this.tipo_Id_Gerente=tipo_Id_Gerente;
 	}
 	public String getNombre()
 	{

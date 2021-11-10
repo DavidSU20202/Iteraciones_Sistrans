@@ -11,8 +11,8 @@ public class Operaciones {
 	private long Numero_Cuenta;
 	private int Valor;
 	private long Puesto_Atencion;
-	private long Empleado;
 	private Date Fecha;
+	private int Tipo_Operacion;
 	
 	@SuppressWarnings("deprecation")
 	public Operaciones()
@@ -23,10 +23,10 @@ public class Operaciones {
 		this.Numero_Cuenta=0;
 		this.Valor=0;
 		this.Puesto_Atencion=0;
-		this.Empleado=0;
+		this.Tipo_Operacion=0;
 		this.Fecha=new Date(1900,0,1);
 	}
-	public Operaciones(long Id_Operacion, int Tipo_Id, long Numero_Id, long Numero_Cuenta, int Valor, long Puesto_Atencion, long Empleado, Date Fecha)
+	public Operaciones(long Id_Operacion, int Tipo_Id, long Numero_Id, long Numero_Cuenta, int Valor, long Puesto_Atencion, int Tipo_Operacion, Date Fecha)
 	{
 		this.Id_Operacion=Id_Operacion;
 		this.Tipo_Id=Tipo_Id;
@@ -34,7 +34,7 @@ public class Operaciones {
 		this.Numero_Cuenta=Numero_Cuenta;
 		this.Valor=Valor;
 		this.Puesto_Atencion=Puesto_Atencion;
-		this.Empleado=Empleado;
+		this.Tipo_Operacion=Tipo_Operacion;
 		this.Fecha=Fecha;
 	}
 	public long getId_Operacion()
@@ -85,13 +85,13 @@ public class Operaciones {
 	{
 		this.Puesto_Atencion=Puesto_Atencion;
 	}
-	public long getEmpleado()
+	public long getTipo_Operacion()
 	{
-		return this.Empleado;
+		return this.Tipo_Operacion;
 	}
-	public void setEmpleado(long Empleado)
+	public void setTipo_Operacion(int Tipo_Operacion)
 	{
-		this.Empleado=Empleado;
+		this.Tipo_Operacion=Tipo_Operacion;
 	}
 	public Date getFecha()
 	{
@@ -104,6 +104,6 @@ public class Operaciones {
 	public String toString()
 	{
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-		return "Operaciones [Id_Operacion="+this.Id_Operacion+", Tipo_Id="+this.Tipo_Id+", Numero_Id"+this.Numero_Id+", Numero_Cuenta="+this.Numero_Cuenta+", Valor"+this.Valor+", Puesto_Atencio="+this.Puesto_Atencion+", Empleado="+this.Empleado+", Fecha="+df.format(this.Fecha)+"]";
+		return "Operaciones [Id_Operacion="+this.Id_Operacion+", Tipo_Id="+this.Tipo_Id+", Numero_Id"+this.Numero_Id+", Numero_Cuenta="+this.Numero_Cuenta+", Valor"+this.Valor+", Puesto_Atencio="+this.Puesto_Atencion+", Tipo_Operacion="+this.Tipo_Operacion+", Fecha="+df.format(this.Fecha)+"]";
 	}
 }
